@@ -24,7 +24,7 @@
       return;
     }
     if (i >= slides.length) {
-      alert("Hết phần story1. Bạn tạo story2 rồi mình nối tiếp nhé.");
+      alert("Hết phần story1.");
       return;
     }
 
@@ -76,4 +76,5 @@
     active.classList.add("is-entering");
     window.setTimeout(() => cleanupEnter(active), ENTER_MS + 100);
   }, { once: true });
+
 })();
