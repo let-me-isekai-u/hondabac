@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <section class="hero">
+  <section class="hero slide" id="hero">
     <div class="hero__stage">
       <img class="hero__bg" src="images/honDaBac.png" alt="" />
       <div class="hero__dim" aria-hidden="true"></div>
@@ -29,31 +29,19 @@
           Di tích Hòn Đá Bạc – Trung tâm chỉ huy kế hoạch phản gián CM-12
         </p>
       </div>
-    </div>
-  </section>
 
-  <section class="intro">
-    <h2>Hành trình lịch sử</h2>
-    <p>
-      Hòn Đá Bạc là địa danh gắn liền với chiến công CM-12,
-      đánh dấu một mốc son quan trọng trong lịch sử bảo vệ Tổ quốc.
-    </p>
-  </section>
-
-  <!-- PHẦN KỂ CHUYỆN -->
-  <section class="story" id="story">
-    <!-- Container trắng (GIỐNG Ý BẠN): chứa cả ảnh + text nằm cạnh nhau -->
-    <div class="story__content">
-      <div class="story__contentGrid">
-        <div class="story__contentText">
-          <h2>Khởi nguồn chuyên án CM12</h2>
-          <p>Đầu thập niên 1980, trong bối cảnh tình hình an ninh còn nhiều phức tạp, các tổ chức phản động lưu vong do Lê Quốc Túy và Mai Văn Hạnh cầm đầu đã lên kế hoạch xâm nhập, phá hoại từ bên ngoài. Trước âm mưu đó, lực lượng an ninh Việt Nam đã bí mật triển khai một chuyên án đặc biệt mang tên CM12 — mở đầu cho một chiến dịch phản gián quy mô lớn và đầy cam go.</p>
-        </div>
-
-        <div class="story__contentMedia">
-          <img src="images/story1.png" alt="Hình minh hoạ câu chuyện" draggable="false" />
-        </div>
+      <!-- NÚT LỚN CHUYỂN SANG STORY -->
+      <div class="hero__cta">
+        <button class="hero__btn" id="toStoryBtn" type="button">
+          Bắt đầu câu chuyện
+        </button>
+        <div class="hero__ctaHint">hoặc nhấn phím →</div>
       </div>
+
+      <!-- MŨI TÊN MỜ BÊN PHẢI (tuỳ thích) -->
+      <button class="nav nav--right" id="toStoryArrow" type="button" aria-label="Tới câu chuyện (story1)">
+        <span class="nav__icon" aria-hidden="true"></span>
+      </button>
     </div>
   </section>
 
