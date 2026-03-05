@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Câu chuyện - Phần 1 (CM-12)</title>
+  <link rel="stylesheet" href="story1.css" />
+</head>
+<body>
+  <main class="deck" id="deck" aria-label="Trình chiếu câu chuyện">
+    <!-- Slide 1 -->
+    <section class="slide is-active" id="s1" aria-label="Slide 1">
+      <div class="slide__bg" aria-hidden="true"></div>
+
+      <div class="slide__content">
+        <div class="card">
+          <div class="card__grid">
+            <div class="card__text">
+              <h2>Khởi nguồn chuyên án CM12</h2>
+              <p>
+                Đầu thập niên 1980, trong bối cảnh tình hình an ninh còn nhiều phức tạp,
+                các tổ chức phản động lưu vong do Lê Quốc Túy và Mai Văn Hạnh cầm đầu đã
+                lên kế hoạch xâm nhập, phá hoại từ bên ngoài. Trước âm mưu đó, lực lượng
+                an ninh Việt Nam đã bí mật triển khai một chuyên án đặc biệt mang tên CM12
+                — mở đầu cho một chiến dịch phản gián quy mô lớn và đầy cam go.
+              </p>
+            </div>
+
+            <div class="card__media">
+              <img src="images/story1.png" alt="Hình minh hoạ câu chuyện" draggable="false" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Điều hướng -->
+      <button class="nav nav--left" id="prevBtn" type="button" aria-label="Về trang trước">
+        <span class="nav__icon" aria-hidden="true"></span>
+      </button>
+
+      <button class="nav nav--right" id="nextBtn" type="button" aria-label="Tới trang tiếp theo">
+        <span class="nav__icon" aria-hidden="true"></span>
+      </button>
+
+      <div class="hint" aria-hidden="true">Nhấn ← → để chuyển</div>
+    </section>
+  </main>
+
+  <script src="story1.js"></script>
+</body>
+</html>

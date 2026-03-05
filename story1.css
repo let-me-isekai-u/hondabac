@@ -1,0 +1,269 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+  background: #0b0f14;
+  color: #111;
+}
+
+/* ===== Layout deck ===== */
+.deck {
+  height: 100dvh;
+  height: 100vh;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 1fr;
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+.slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* =========================================================
+   TRANSITION / OPEN EFFECT (CHẬM + mờ -> rõ nhiều)
+   - Background hiện dần
+   - Card hiện dần + trượt nhẹ
+   - Ảnh hiện SAU CÙNG
+   ========================================================= */
+:root {
+  --enter-duration: 2200ms;  /* chậm hơn */
+  --leave-duration: 700ms;
+  --ease-cine: cubic-bezier(.16, 1, .3, 1);
+}
+
+/* Khi slide vào */
+.slide.is-entering .slide__bg::after {
+  animation: bgReveal var(--enter-duration) ease-out both;
+}
+
+.slide.is-entering .card {
+  animation: cardReveal var(--enter-duration) var(--ease-cine) both;
+}
+
+.slide.is-entering .card__media img {
+  /* ảnh xuất hiện sau cùng */
+  animation: mediaReveal 1300ms var(--ease-cine) both;
+  animation-delay: 1200ms;
+}
+
+/* Khi slide rời */
+.slide.is-leaving {
+  animation: slideLeave var(--leave-duration) ease both;
+}
+
+@keyframes bgReveal {
+  from {
+    opacity: 1;
+    /* overlay đậm hơn lúc đầu -> nhạt dần */
+    background:
+      radial-gradient(circle at 65% 35%, rgba(255,255,255,0.06), rgba(0,0,0,0.40)),
+      linear-gradient(to bottom, rgba(0,0,0,0.18), rgba(0,0,0,0.28));
+  }
+  to {
+    opacity: 1;
+    background:
+      radial-gradient(circle at 65% 35%, rgba(255,255,255,0.10), rgba(0,0,0,0.18)),
+      linear-gradient(to bottom, rgba(0,0,0,0.08), rgba(0,0,0,0.12));
+  }
+}
+
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(1.01);
+    filter: blur(16px) saturate(0.92) contrast(0.92);
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0) saturate(1) contrast(1);
+  }
+}
+
+@keyframes mediaReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+    filter: blur(14px) saturate(0.95) contrast(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0) saturate(1) contrast(1);
+  }
+}
+
+@keyframes slideLeave {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ===== Background ===== */
+.slide__bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("images/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* overlay nhẹ cho “cinematic” */
+.slide__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 65% 35%, rgba(255,255,255,0.10), rgba(0,0,0,0.18)),
+    linear-gradient(to bottom, rgba(0,0,0,0.08), rgba(0,0,0,0.12));
+}
+
+/* ===== Content ===== */
+.slide__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 0 8%;
+}
+
+.card {
+  width: min(1100px, 100%);
+  border-radius: 18px;
+  padding: 22px 24px;
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.20);
+}
+
+.card__grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.card__text h2 {
+  margin-bottom: 10px;
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+.card__text p {
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgba(0,0,0,0.82);
+}
+
+.card__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.14);
+  user-select: none;
+  pointer-events: none;
+  will-change: opacity, transform, filter;
+}
+
+/* ===== Nav arrows ===== */
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.35);
+
+  background: rgba(0,0,0,0.18);
+  backdrop-filter: blur(6px);
+
+  cursor: pointer;
+  opacity: 0.22;
+  transition: opacity 220ms ease, transform 220ms ease, background 220ms ease, border-color 220ms ease;
+}
+
+.nav:hover {
+  opacity: 0.95;
+  background: rgba(0,0,0,0.28);
+  border-color: rgba(255,255,255,0.55);
+}
+
+.nav:active {
+  transform: translateY(-50%) scale(0.98);
+}
+
+.nav:focus-visible {
+  outline: 3px solid rgba(255,255,255,0.85);
+  outline-offset: 4px;
+}
+
+.nav--left { left: 16px; }
+.nav--right { right: 16px; }
+
+.nav__icon {
+  display: block;
+  width: 12px;
+  height: 12px;
+  margin: 0 auto;
+  border-top: 2px solid rgba(255,255,255,0.92);
+  border-right: 2px solid rgba(255,255,255,0.92);
+}
+
+.nav--left .nav__icon { transform: rotate(-135deg); }
+.nav--right .nav__icon { transform: rotate(45deg); }
+
+/* Hint */
+.hint {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 2;
+  color: rgba(255,255,255,0.75);
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  text-shadow: 0 12px 26px rgba(0,0,0,0.35);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .slide__content { padding: 0 6%; }
+  .card__grid { grid-template-columns: 1fr; }
+  .card__text h2 { font-size: 24px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .slide.is-entering .slide__bg::after,
+  .slide.is-entering .card,
+  .slide.is-entering .card__media img,
+  .slide.is-leaving {
+    animation: none !important;
+  }
+}
