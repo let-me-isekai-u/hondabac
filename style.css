@@ -5,13 +5,34 @@
   font-family: Arial, sans-serif;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   line-height: 1.6;
+  overflow: hidden; /* vì index chỉ có 1 hero full-screen */
+}
+
+/* =========================================================
+   VIEWPORT FIX (chống lỗi 100vh trên Windows/Mobile)
+   - ưu tiên 100dvh nếu trình duyệt hỗ trợ
+   - fallback qua --app-vh do JS set
+   ========================================================= */
+:root {
+  --app-vh: 1vh;
+}
+
+/* Slide / Hero full screen */
+.slide,
+.hero {
+  height: 100vh; /* fallback */
+  height: 100dvh; /* chuẩn hơn nếu support */
+  height: calc(var(--app-vh) * 100); /* fallback ổn định */
 }
 
 /* HERO */
 .hero {
-  height: 100vh;
   position: relative;
   overflow: hidden;
   background: #dfe7ef;
@@ -86,6 +107,7 @@ body {
   outline-offset: 6px;
 }
 
+/* CLICK mở: nền tối + asset vẫn nổi bật */
 .hero.is-info-open .hero__dim {
   background: rgba(0, 0, 0, 0.45);
 }
@@ -99,6 +121,24 @@ body {
     saturate(1.08);
 }
 
+.hero.is-info-open .hero__infoText {
+  animation: infoTextReveal 600ms ease forwards;
+}
+
+@keyframes infoTextReveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    text-shadow: 0 0 0 rgba(0,0,0,0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    text-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+}
+
+/* popup info cạnh asset (vị trí do JS set) */
 .hero__info {
   position: absolute;
   z-index: 3;
@@ -130,9 +170,19 @@ body {
   transition: opacity 260ms ease, transform 260ms ease, visibility 0s;
 }
 
+@font-face {
+  font-family: "ClassiqueSaigon";
+  src: url("fonts/ClassiqueSaigon.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
 .hero__infoText {
-  font-size: 16px;
-  line-height: 1.35;
+  font-size: 18px;
+  line-height: 1.4;
+  font-family: "ClassiqueSaigon", serif;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .hero__infoClose {
@@ -147,6 +197,7 @@ body {
   padding: 4px 6px;
 }
 
+/* mobile tweak: GIỮ NGUYÊN phần asset của bạn */
 @media (max-width: 768px) {
   .hero__asset--monument {
     left: 50%;
@@ -155,6 +206,7 @@ body {
   }
 }
 
+/* nếu thiết bị không hover (mobile), không cần hiệu ứng hover */
 @media (hover: none) {
   .hero__asset--monument:hover {
     transform: translate(-50%, -100%) translate(var(--dx), var(--dy));
@@ -164,62 +216,54 @@ body {
   }
 }
 
-/* INTRO */
-.intro {
-  padding: 100px 15%;
-  text-align: center;
+/* =========================================================
+   HERO INTRO ANIMATION (chậm + từ từ)
+   chạy 1 lần / session (JS điều khiển class is-booting)
+   ========================================================= */
+:root {
+  --intro-bg-duration: 1800ms;
+  --intro-asset-duration: 2200ms;
 }
 
-/* STORY */
-.story {
-  min-height: 100vh;
-  padding: 120px 8%;
-  position: relative;
-
-  background-image: url("images/background.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+.hero.is-booting .hero__bg {
+  animation: heroBgFadeIn var(--intro-bg-duration) ease-out both;
 }
 
-/*
-  Đây là "container trắng chứa text" như bạn nói:
-  bây giờ nó sẽ CHỨA luôn cả ảnh + text nằm cạnh nhau.
-*/
-.story__content {
-  max-width: 1100px;
-  margin: 0 auto;
-
-  padding: 22px 24px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+.hero.is-booting .hero__asset--monument {
+  animation: monumentFloatDown var(--intro-asset-duration) cubic-bezier(.16, 1, .3, 1) both;
 }
 
-.story__contentGrid {
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 24px;
-  align-items: center;
+.hero.is-booting .hero__asset--monument:hover {
+  transform: translate(-50%, -100%) translate(var(--dx), var(--dy));
+  filter: drop-shadow(0 22px 20px rgba(0, 0, 0, 0.22))
+    drop-shadow(0 10px 12px rgba(0, 0, 0, 0.12)) contrast(1.02)
+    saturate(1.03);
 }
 
-.story__contentText h2 {
-  margin-bottom: 10px;
+@keyframes heroBgFadeIn {
+  from { opacity: 0; filter: saturate(0.92) contrast(0.96) brightness(0.98); }
+  to { opacity: 1; filter: saturate(1) contrast(1) brightness(1); }
 }
 
-.story__contentMedia img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 14px;
-  box-shadow: 0 14px 30px rgba(0,0,0,0.12);
-  user-select: none;
-  pointer-events: none;
+@keyframes monumentFloatDown {
+  from {
+    opacity: 0;
+    transform:
+      translate(-50%, -100%)
+      translate(var(--dx), var(--dy))
+      translateY(-70px);
+  }
+  55% { opacity: 1; }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) translate(var(--dx), var(--dy));
+  }
 }
 
-@media (max-width: 900px) {
-  .story__contentGrid {
-    grid-template-columns: 1fr;
+/* Tôn trọng user setting giảm chuyển động */
+@media (prefers-reduced-motion: reduce) {
+  .hero.is-booting .hero__bg,
+  .hero.is-booting .hero__asset--monument {
+    animation: none !important;
   }
 }
